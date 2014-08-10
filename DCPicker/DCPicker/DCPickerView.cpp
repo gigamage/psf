@@ -35,6 +35,7 @@ END_MESSAGE_MAP()
 CDCPickerView::CDCPickerView()
 {
 	// TODO: add construction code here
+	m_bActive = FALSE;
 
 }
 

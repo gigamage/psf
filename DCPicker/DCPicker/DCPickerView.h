@@ -23,6 +23,7 @@ public:
 	CDCPickerDoc* GetDocument() const;
 	void SetPageSize(CSize size);
 
+	BOOL m_bActive; // is the view active?
 
 // Operations
 public:
