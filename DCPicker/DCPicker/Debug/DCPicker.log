@@ -1,0 +1,38 @@
+﻿Build started 8/10/2014 1:38:43 PM.
+     1>Project "\\psf\Home\Documents\GitHub\psf\DCPicker\DCPicker\DCPicker.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\DCPicker.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DCPicker.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ChildFrm.cpp ClassView.cpp DCPicker.cpp DCPickerDoc.cpp DCPickerView.cpp FileView.cpp MainFrm.cpp OutputWnd.cpp PropertiesWnd.cpp ViewTree.cpp
+         ViewTree.cpp
+         PropertiesWnd.cpp
+         OutputWnd.cpp
+         MainFrm.cpp
+         FileView.cpp
+         DCPickerView.cpp
+         DCPickerDoc.cpp
+         DCPicker.cpp
+         ClassView.cpp
+         ChildFrm.cpp
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0409" /IDebug\ /nologo /fo"Debug\DCPicker.res" DCPicker.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.exe" /INCREMENTAL /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"\\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.lib" /MACHINE:X86 Debug\DCPicker.res
+         Debug\ChildFrm.obj
+         Debug\ClassView.obj
+         Debug\DCPicker.obj
+         Debug\DCPickerDoc.obj
+         Debug\DCPickerView.obj
+         Debug\FileView.obj
+         Debug\MainFrm.obj
+         Debug\OutputWnd.obj
+         Debug\PropertiesWnd.obj
+         Debug\stdafx.obj
+         Debug\ViewTree.obj
+         DCPicker.vcxproj -> \\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.exe
+     1>Done Building Project "\\psf\Home\Documents\GitHub\psf\DCPicker\DCPicker\DCPicker.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:12.85
