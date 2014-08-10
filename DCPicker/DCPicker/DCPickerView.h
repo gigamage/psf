@@ -60,6 +60,8 @@ protected:
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 	void DrawGrid(CDC* pDC);
 	void DrawBackgroundImage(CDC* pDC);
+public:
+	void LoadDefaultImage();
 // Implementation
 public:
 	virtual ~CDCPickerView();

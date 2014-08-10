@@ -48,7 +48,9 @@ BOOL CDCPickerDoc::OnNewDocument()
 
 	// TODO: add reinitialization code here
 	// (SDI documents will reuse this document)
-
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+		((CDCPickerView*)GetNextView(pos))->LoadDefaultImage();
 	return TRUE;
 }
 
@@ -163,7 +165,9 @@ void CDCPickerDoc::ComputePageSize()
 		m_size = new_size;
 		POSITION pos = GetFirstViewPosition();
 		while (pos != NULL)
+		{
 			((CDCPickerView*)GetNextView(pos))->SetPageSize(m_size);
+		}
 	}
 
 }

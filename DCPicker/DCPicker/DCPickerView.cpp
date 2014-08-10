@@ -172,7 +172,6 @@ void CDCPickerView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 
 void CDCPickerView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
-	m_kImage.Load(L"c:\\Down\\thumb100.jpg");
 
 	ClientToScreen(&point);
 	OnContextMenu(this, point);
@@ -252,6 +251,7 @@ void CDCPickerView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* 
 {
 	//m_kImage.Load(L"z:\\Documents\\GitHub\\psf\\DCPicker\\data\\thumb\\thumb100.jpg");
 	CScrollView::OnActivateView(bActivate, pActivateView, pDeactiveView);
+	//LoadDefaultImage();
 
 	// invalidate selections when active status changes
 	if (m_bActive != bActivate)
@@ -572,3 +572,7 @@ void CDCPickerView::DrawBackgroundImage(CDC* pDrawDC)
 }
 
 
+void CDCPickerView::LoadDefaultImage()
+{
+	m_kImage.Load(L"..\\data\\thumb\\thumb100.jpg");
+}
