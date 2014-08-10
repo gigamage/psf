@@ -5,6 +5,9 @@
 #include "stdafx.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
+
+#include "DCDrawObj.h"
+
 #include "DCPicker.h"
 #include "MainFrm.h"
 

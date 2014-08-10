@@ -1,12 +1,15 @@
-﻿Build started 8/10/2014 2:09:46 PM.
+﻿Build started 8/11/2014 12:36:36 AM.
      1>Project "\\psf\Home\Documents\GitHub\psf\DCPicker\DCPicker\DCPicker.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DCPicker.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt DCPickerView.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _ATL_STATIC_REGISTRY /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DCPicker.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt DCPickerView.cpp
          DCPickerView.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.exe" /INCREMENTAL /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"\\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Documents\GitHub\psf\DCPicker\Debug\DCPicker.lib" /MACHINE:X86 Debug\DCPicker.res
          Debug\ChildFrm.obj
          Debug\ClassView.obj
+         Debug\DCDrawItem.obj
+         Debug\DCDrawObj.obj
+         Debug\DCDrawTool.obj
          Debug\DCPicker.obj
          Debug\DCPickerDoc.obj
          Debug\DCPickerView.obj
@@ -21,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.70
+Time Elapsed 00:00:02.44

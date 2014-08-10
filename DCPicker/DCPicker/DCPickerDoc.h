@@ -6,7 +6,7 @@
 #pragma once
 
 
-class CDCPickerDoc : public CDocument
+class CDCPickerDoc : public COleDocument
 {
 protected: // create from serialization only
 	CDCPickerDoc();
@@ -16,9 +16,16 @@ protected: // create from serialization only
 public:
 	const CSize& GetSize() const { return m_size; }
 	void ComputePageSize();
+	CDCDrawObjList* GetObjects() { return &m_objects; }
+	COLORREF GetPaperColor() const { return m_paperColor; }
 
 // Operations
 public:
+	CDCDrawObj* ObjectAt(const CPoint& point);
+	void Draw(CDC* pDC, CDCPickerView* pView);
+
+	void Add(CDCDrawObj* pObj);
+	void Remove(CDCDrawObj* pObj);
 
 // Overrides
 public:
@@ -40,6 +47,8 @@ public:
 protected:
 	CSize m_size;
 	int m_nMapMode;
+	CDCDrawObjList m_objects;
+	COLORREF m_paperColor;
 
 // Generated message map functions
 protected:

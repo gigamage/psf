@@ -9,6 +9,8 @@
 #include "DCPicker.h"
 #endif
 
+#include "DCDrawObj.h"
+
 #include "DCPickerDoc.h"
 #include "DCPickerView.h"
 #include <propkey.h>
@@ -19,9 +21,9 @@
 
 // CDCPickerDoc
 
-IMPLEMENT_DYNCREATE(CDCPickerDoc, CDocument)
+IMPLEMENT_DYNCREATE(CDCPickerDoc, COleDocument)
 
-BEGIN_MESSAGE_MAP(CDCPickerDoc, CDocument)
+BEGIN_MESSAGE_MAP(CDCPickerDoc, COleDocument)
 END_MESSAGE_MAP()
 
 
@@ -30,7 +32,9 @@ END_MESSAGE_MAP()
 CDCPickerDoc::CDCPickerDoc()
 {
 	// TODO: add one-time construction code here
-
+	EnableCompoundFile();
+	m_paperColor = RGB(255, 255, 255);
+	ComputePageSize();
 }
 
 CDCPickerDoc::~CDCPickerDoc()
@@ -162,4 +166,52 @@ void CDCPickerDoc::ComputePageSize()
 			((CDCPickerView*)GetNextView(pos))->SetPageSize(m_size);
 	}
 
+}
+
+
+CDCDrawObj* CDCPickerDoc::ObjectAt(const CPoint& point)
+{
+	CRect rect(point, CSize(1, 1));
+	POSITION pos = m_objects.GetTailPosition();
+	while (pos != NULL)
+	{
+		CDCDrawObj* pObj = m_objects.GetPrev(pos);
+		if (pObj->Intersects(rect))
+			return pObj;
+	}
+
+	return NULL;
+}
+
+void CDCPickerDoc::Draw(CDC* pDC, CDCPickerView* pView)
+{
+	POSITION pos = m_objects.GetHeadPosition();
+	while (pos != NULL)
+	{
+		CDCDrawObj* pObj = m_objects.GetNext(pos);
+		pObj->Draw(pDC);
+		if (pView->m_bActive && !pDC->IsPrinting() && pView->IsSelected(pObj))
+			pObj->DrawTracker(pDC, CDCDrawObj::selected);
+	}
+}
+
+void CDCPickerDoc::Add(CDCDrawObj* pObj)
+{
+	m_objects.AddTail(pObj);
+	pObj->m_pDocument = this;
+}
+
+void CDCPickerDoc::Remove(CDCDrawObj* pObj)
+{
+	// Find and remove from document
+	POSITION pos = m_objects.Find(pObj);
+	if (pos != NULL)
+		m_objects.RemoveAt(pos);
+	// set document modified flag
+	SetModifiedFlag();
+
+	// call remove for each view so that the view can remove from m_selection
+	pos = GetFirstViewPosition();
+	while (pos != NULL)
+		((CDCPickerView*)GetNextView(pos))->Remove(pObj);
 }

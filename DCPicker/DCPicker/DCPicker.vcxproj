@@ -22,6 +22,7 @@
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfAtl>Static</UseOfAtl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -103,6 +104,9 @@
   <ItemGroup>
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="ClassView.h" />
+    <ClInclude Include="DCDrawItem.h" />
+    <ClInclude Include="DCDrawObj.h" />
+    <ClInclude Include="DCDrawTool.h" />
     <ClInclude Include="DCPicker.h" />
     <ClInclude Include="DCPickerDoc.h" />
     <ClInclude Include="DCPickerView.h" />
@@ -118,6 +122,9 @@
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="ClassView.cpp" />
+    <ClCompile Include="DCDrawItem.cpp" />
+    <ClCompile Include="DCDrawObj.cpp" />
+    <ClCompile Include="DCDrawTool.cpp" />
     <ClCompile Include="DCPicker.cpp" />
     <ClCompile Include="DCPickerDoc.cpp" />
     <ClCompile Include="DCPickerView.cpp" />
