@@ -11,7 +11,6 @@
 #define new DEBUG_NEW
 #endif
 
-enum { IDD = IDD_DCPICK_DIALOG };
 
 // CAboutDlg dialog used for App About
 
