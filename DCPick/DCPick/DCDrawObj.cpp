@@ -175,7 +175,7 @@ void CDCDrawObj::Invalidate()
 
 
 // position is in logical
-void CDCDrawObj::MoveTo(const CRect& position, CDCPickerView* pView)
+void CDCDrawObj::MoveTo(const CRect& position, CWorkpadDlg* pView)
 {
 	ASSERT_VALID(this);
 
@@ -199,7 +199,7 @@ void CDCDrawObj::MoveTo(const CRect& position, CDCPickerView* pView)
 
 
 // point must be in logical
-void CDCDrawObj::MoveHandleTo(int nHandle, CPoint point, CDCPickerView* pView)
+void CDCDrawObj::MoveHandleTo(int nHandle, CPoint point, CWorkpadDlg* pView)
 {
 	ASSERT_VALID(this);
 
@@ -250,7 +250,7 @@ void CDCDrawObj::MoveHandleTo(int nHandle, CPoint point, CDCPickerView* pView)
 }
 
 // return rectange of handle in logical coords
-CRect CDCDrawObj::GetHandleRect(int nHandleID, CDCPickerView* pView)
+CRect CDCDrawObj::GetHandleRect(int nHandleID, CWorkpadDlg* pView)
 {
 	ASSERT_VALID(this);
 	ENSURE(pView != NULL);
@@ -268,7 +268,7 @@ CRect CDCDrawObj::GetHandleRect(int nHandleID, CDCPickerView* pView)
 }
 
 
-int CDCDrawObj::HitTest(CPoint point, CDCPickerView* pView, BOOL bSelected)
+int CDCDrawObj::HitTest(CPoint point, CWorkpadDlg* pView, BOOL bSelected)
 {
 	ASSERT_VALID(this);
 	ASSERT(pView != NULL);

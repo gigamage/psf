@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "DCPick.h"
 #include "DCPickDlg.h"
+#include "WorkpadDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
@@ -155,5 +156,25 @@ HCURSOR CDCPickDlg::OnQueryDragIcon()
 
 void CDCPickDlg::OnBnClickedButtonOpenfile()
 {
-	// TODO: Add your control notification handler code here
+
+	/*CWorkpadDlg dlgWorkpad;
+	dlgWorkpad.DoModal();
+*/
+
+	CFileDialog dlgFile(TRUE);
+	CString fileName;
+	wchar_t* p = fileName.GetBuffer( MAX_PATH );
+
+	OPENFILENAME& ofn = dlgFile.GetOFN( );
+	ofn.lpstrFile = p;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrFilter = L"Image files\0*.jpg;*.png;*.bmp";
+	if (IDOK == dlgFile.DoModal())
+	{
+		CWorkpadDlg dlgWorkpad;
+		dlgWorkpad.SetImageFile(fileName);
+		dlgWorkpad.DoModal();
+	}
+
+	fileName.ReleaseBuffer();
 }
