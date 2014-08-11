@@ -1,7 +1,7 @@
 #pragma once
 
 // CDCDrawObj command target
-class CDCPickDlg;
+class CDCPickerView;
 class CDCPickerDoc;
 class CDCDrawItem;
 
@@ -24,17 +24,17 @@ public:
 	virtual CPoint GetHandle(int nHandle);
 	virtual HCURSOR GetHandleCursor(int nHandle);
 
-	CRect GetHandleRect(int nHandleID, CDCPickDlg* pView);
+	CRect GetHandleRect(int nHandleID, CDCPickerView* pView);
 
 	// Operations
 	virtual void Draw(CDC* pDC);
 	virtual void DrawTracker(CDC* pDC, TrackerState state);
 
-	virtual int HitTest(CPoint point, CDCPickDlg* pView, BOOL bSelected);
+	virtual int HitTest(CPoint point, CDCPickerView* pView, BOOL bSelected);
 	virtual BOOL Intersects(const CRect& rect);
 	virtual CDCDrawObj* Clone(CDCPickerDoc* pDoc = NULL);
-	virtual void MoveTo(const CRect& positon, CDCPickDlg* pView = NULL);
-	virtual void MoveHandleTo(int nHandle, CPoint point, CDCPickDlg* pView = NULL);
+	virtual void MoveTo(const CRect& positon, CDCPickerView* pView = NULL);
+	virtual void MoveHandleTo(int nHandle, CPoint point, CDCPickerView* pView = NULL);
 
 	void Invalidate();
 	virtual void Remove();

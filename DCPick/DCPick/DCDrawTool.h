@@ -10,7 +10,7 @@ enum DrawShape
 	poly
 };
 
-class CDCPickDlg;
+class CDCPickerView;
 
 class CDCDrawTool
 {
@@ -19,9 +19,9 @@ public:
 	~CDCDrawTool(void);
 
 //	overridables
-	virtual void OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
-	virtual void OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
-	virtual void OnMouseMove(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
+	virtual void OnLButtonDown(CDCPickerView* pView, UINT nFlags, const CPoint& point);
+	virtual void OnLButtonUp(CDCPickerView* pView, UINT nFlags, const CPoint& point);
+	virtual void OnMouseMove(CDCPickerView* pView, UINT nFlags, const CPoint& point);
 
 //	Attributes
 	DrawShape	m_drawShape;
@@ -42,9 +42,9 @@ public:
 	CDCSelectTool();
 
 	//	Implementation
-	virtual void OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
-	virtual void OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
-	virtual void OnMouseMove(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
+	virtual void OnLButtonDown(CDCPickerView* pView, UINT nFlags, const CPoint& point);
+	virtual void OnLButtonUp(CDCPickerView* pView, UINT nFlags, const CPoint& point);
+	virtual void OnMouseMove(CDCPickerView* pView, UINT nFlags, const CPoint& point);
 
 };
 
@@ -54,9 +54,9 @@ public:
 	CDCRectTool(DrawShape drawShape);
 
 	// Implementation
-	virtual void OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
-	virtual void OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
-	virtual void OnMouseMove(CDCPickDlg* pView, UINT nFlags, const CPoint& point);
+	virtual void OnLButtonDown(CDCPickerView* pView, UINT nFlags, const CPoint& point);
+	virtual void OnLButtonUp(CDCPickerView* pView, UINT nFlags, const CPoint& point);
+	virtual void OnMouseMove(CDCPickerView* pView, UINT nFlags, const CPoint& point);
 
 };
 

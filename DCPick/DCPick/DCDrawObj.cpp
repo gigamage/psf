@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "DCPicker.h"
 #include "DCDrawObj.h"
 
 #include "DCPickerView.h"
@@ -174,7 +175,7 @@ void CDCDrawObj::Invalidate()
 
 
 // position is in logical
-void CDCDrawObj::MoveTo(const CRect& position, CDCPickDlg* pView)
+void CDCDrawObj::MoveTo(const CRect& position, CDCPickerView* pView)
 {
 	ASSERT_VALID(this);
 
@@ -198,7 +199,7 @@ void CDCDrawObj::MoveTo(const CRect& position, CDCPickDlg* pView)
 
 
 // point must be in logical
-void CDCDrawObj::MoveHandleTo(int nHandle, CPoint point, CDCPickDlg* pView)
+void CDCDrawObj::MoveHandleTo(int nHandle, CPoint point, CDCPickerView* pView)
 {
 	ASSERT_VALID(this);
 
@@ -249,7 +250,7 @@ void CDCDrawObj::MoveHandleTo(int nHandle, CPoint point, CDCPickDlg* pView)
 }
 
 // return rectange of handle in logical coords
-CRect CDCDrawObj::GetHandleRect(int nHandleID, CDCPickDlg* pView)
+CRect CDCDrawObj::GetHandleRect(int nHandleID, CDCPickerView* pView)
 {
 	ASSERT_VALID(this);
 	ENSURE(pView != NULL);
@@ -267,7 +268,7 @@ CRect CDCDrawObj::GetHandleRect(int nHandleID, CDCPickDlg* pView)
 }
 
 
-int CDCDrawObj::HitTest(CPoint point, CDCPickDlg* pView, BOOL bSelected)
+int CDCDrawObj::HitTest(CPoint point, CDCPickerView* pView, BOOL bSelected)
 {
 	ASSERT_VALID(this);
 	ASSERT(pView != NULL);

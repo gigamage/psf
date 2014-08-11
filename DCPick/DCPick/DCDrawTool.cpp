@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "DCDrawObj.h"
+#include "DCPickerDoc.h"
+#include "DCPickerView.h"
 #include "DCDrawTool.h"
 
 CPtrList CDCDrawTool::c_tools;
@@ -23,7 +25,7 @@ CDCDrawTool::~CDCDrawTool(void)
 {
 }
 
-void CDCDrawTool::OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCDrawTool::OnLButtonDown(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	// deactivate any in-place active item on this view!
 	COleClientItem* pActiveItem = pView->GetDocument()->GetInPlaceActiveItem(pView);
@@ -39,7 +41,7 @@ void CDCDrawTool::OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& po
 	c_last = point;
 }
 
-void CDCDrawTool::OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCDrawTool::OnLButtonUp(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	ReleaseCapture();
 
@@ -47,7 +49,7 @@ void CDCDrawTool::OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& poin
 		c_drawShape = selection;
 }
 
-void CDCDrawTool::OnMouseMove(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCDrawTool::OnMouseMove(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	c_last = point;
 	SetCursor(AfxGetApp()->LoadStandardCursor(IDC_ARROW));
@@ -86,7 +88,7 @@ CDCSelectTool::CDCSelectTool()
 {
 }
 
-void CDCSelectTool::OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCSelectTool::OnLButtonDown(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	CPoint local = point;
 	pView->ClientToDoc(local);
@@ -140,7 +142,7 @@ void CDCSelectTool::OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& 
 
 }
 
-void CDCSelectTool::OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCSelectTool::OnLButtonUp(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	if (pView->GetCapture() == pView)
 	{
@@ -162,7 +164,7 @@ void CDCSelectTool::OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& po
 	CDCDrawTool::OnLButtonUp(pView, nFlags, point);
 }
 
-void CDCSelectTool::OnMouseMove(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCSelectTool::OnMouseMove(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	if (pView->GetCapture() != pView)
 	{
@@ -245,7 +247,7 @@ CDCRectTool::CDCRectTool(DrawShape drawShape)
 
 
 
-void CDCRectTool::OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCRectTool::OnLButtonDown(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	CDCDrawTool::OnLButtonDown(pView, nFlags, point);
 
@@ -284,7 +286,7 @@ void CDCRectTool::OnLButtonDown(CDCPickDlg* pView, UINT nFlags, const CPoint& po
 
 
 
-void CDCRectTool::OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCRectTool::OnLButtonUp(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	if (point == c_down)
 	{
@@ -298,7 +300,7 @@ void CDCRectTool::OnLButtonUp(CDCPickDlg* pView, UINT nFlags, const CPoint& poin
 	selectTool.OnLButtonUp(pView, nFlags, point);
 }
 
-void CDCRectTool::OnMouseMove(CDCPickDlg* pView, UINT nFlags, const CPoint& point)
+void CDCRectTool::OnMouseMove(CDCPickerView* pView, UINT nFlags, const CPoint& point)
 {
 	SetCursor(AfxGetApp()->LoadStandardCursor(IDC_CROSS));
 	selectTool.OnMouseMove(pView, nFlags, point);

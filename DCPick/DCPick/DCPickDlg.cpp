@@ -11,6 +11,7 @@
 #define new DEBUG_NEW
 #endif
 
+enum { IDD = IDD_DCPICK_DIALOG };
 
 // CAboutDlg dialog used for App About
 
@@ -48,7 +49,7 @@ END_MESSAGE_MAP()
 
 
 CDCPickDlg::CDCPickDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CDCPickDlg::IDD, pParent)
+	: CDialogEx(IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
