@@ -2,11 +2,10 @@
 //
 
 #include "stdafx.h"
-#include "DCPicker.h"
 #include "DCDrawObj.h"
+#include "resource.h"
+#include "WorkpadDlg.h"
 
-#include "DCPickerView.h"
-#include "DCPickerDoc.h"
 
 // CDCDrawObj
 IMPLEMENT_SERIAL(CDCDrawObj, CObject, 0)
@@ -170,7 +169,7 @@ CPoint CDCDrawObj::GetHandle(int nHandle)
 void CDCDrawObj::Invalidate()
 {
 	ASSERT_VALID(this);
-	m_pDocument->UpdateAllViews(NULL, HINT_UPDATE_DRAWOBJ, this);
+	m_pDocument->UpdateDlg(HINT_UPDATE_DRAWOBJ, this);
 }
 
 
@@ -194,7 +193,7 @@ void CDCDrawObj::MoveTo(const CRect& position, CWorkpadDlg* pView)
 		m_position = position;
 		pView->InvalObj(this);
 	}
-	m_pDocument->SetModifiedFlag();
+	//m_pDocument->SetModifiedFlag();
 }
 
 
@@ -306,7 +305,7 @@ BOOL CDCDrawObj::Intersects(const CRect& rect)
 	return !(rectT & fixed).IsRectEmpty();
 }
 
-CDCDrawObj* CDCDrawObj::Clone(CDCPickerDoc* pDoc)
+CDCDrawObj* CDCDrawObj::Clone(CWorkpadDlg* pDoc)
 {
 	ASSERT_VALID(this);
 
@@ -337,9 +336,9 @@ void CDCDrawObj::Serialize(CArchive& ar)
 	else
 	{
 		// get the document back pointer from the archive
-		m_pDocument = (CDCPickerDoc*)ar.m_pDocument;
+		m_pDocument = (CWorkpadDlg*)ar.m_pDocument;
 		ASSERT_VALID(m_pDocument);
-		ASSERT_KINDOF(CDCPickerDoc, m_pDocument);
+		ASSERT_KINDOF(CWorkpadDlg, m_pDocument);
 
 		WORD wTemp;
 		ar >> m_position;

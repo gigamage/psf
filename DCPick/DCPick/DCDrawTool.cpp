@@ -89,9 +89,9 @@ void CDCSelectTool::OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint&
 	selectMode = none;
 
 	// Check for resizing (only allowed on single selections)
-	if (pView->m_selection.GetCount() == 1)
+	if (pView->m_pSelection->GetCount() == 1)
 	{
-		pObj = pView->m_selection.GetHead();
+		pObj = pView->m_pSelection->GetHead();
 		nDragHandle = pObj->HitTest(local, pView, TRUE);
 		if (nDragHandle != 0)
 			selectMode = size;
@@ -100,7 +100,7 @@ void CDCSelectTool::OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint&
 	// See if the click was on an object, select and start move if so
 	if (selectMode == none)
 	{
-		pObj = pView->GetDocument()->ObjectAt(local);
+		pObj = pView->ObjectAt(local);
 
 		if (pObj != NULL)
 		{
@@ -149,7 +149,7 @@ void CDCSelectTool::OnLButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 		}
 		else if (selectMode != none)
 		{
-			pView->GetDocument()->UpdateAllViews(pView);
+			//pView->GetDocument()->UpdateAllViews(pView);
 		}
 	}
 
@@ -160,9 +160,9 @@ void CDCSelectTool::OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 {
 	if (pView->GetCapture() != pView)
 	{
-		if (c_drawShape == selection && pView->m_selection.GetCount() == 1)
+		if (c_drawShape == selection && pView->m_pSelection->GetCount() == 1)
 		{
-			CDCDrawObj* pObj = pView->m_selection.GetHead();
+			CDCDrawObj* pObj = pView->m_pSelection->GetHead();
 			CPoint local = point;
 			pView->ClientToDoc(local);
 			int nHandle = pObj->HitTest(local, pView, TRUE);
@@ -195,10 +195,10 @@ void CDCSelectTool::OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 	pView->ClientToDoc(local);
 	CPoint delta = (CPoint)(local - lastPoint);
 
-	POSITION pos = pView->m_selection.GetHeadPosition();
+	POSITION pos = pView->m_pSelection->GetHeadPosition();
 	while (pos != NULL)
 	{
-		CDCDrawObj* pObj = pView->m_selection.GetNext(pos);
+		CDCDrawObj* pObj = pView->m_pSelection->GetNext(pos);
 		CRect position = pObj->m_position;
 
 		if (selectMode == move)
@@ -217,7 +217,7 @@ void CDCSelectTool::OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 	if (selectMode == size && c_drawShape == selection)
 	{
 		c_last = point;
-		SetCursor(pView->m_selection.GetHead()->GetHandleCursor(nDragHandle));
+		SetCursor(pView->m_pSelection->GetHead()->GetHandleCursor(nDragHandle));
 		return; // bypass CDrawTool
 	}
 
@@ -268,7 +268,7 @@ void CDCRectTool::OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 		pObj->m_nShape = CDCDrawRect::line;
 		break;
 	}
-	pView->GetDocument()->Add(pObj);
+	pView->Add(pObj);
 	pView->Select(pObj);
 
 	selectMode = size;
@@ -283,8 +283,8 @@ void CDCRectTool::OnLButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& poi
 	if (point == c_down)
 	{
 		// Don't create empty objects...
-		CDCDrawObj *pObj = pView->m_selection.GetTail();
-		pView->GetDocument()->Remove(pObj);
+		CDCDrawObj *pObj = pView->m_pSelection->GetTail();
+		pView->Remove(pObj);
 		pObj->Remove();
 		selectTool.OnLButtonDown(pView, nFlags, point); // try a select!
 	}

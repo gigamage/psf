@@ -2,7 +2,6 @@
 
 // CDCDrawObj command target
 class CWorkpadDlg;
-class CDCPickerDoc;
 class CDCDrawItem;
 
 class CDCDrawObj : public CObject
@@ -19,7 +18,7 @@ public:
 
 	// Attributes
 	CRect m_position;
-	CDCPickerDoc* m_pDocument;
+	CWorkpadDlg* m_pDocument;
 	virtual int GetHandleCount();
 	virtual CPoint GetHandle(int nHandle);
 	virtual HCURSOR GetHandleCursor(int nHandle);
@@ -32,7 +31,7 @@ public:
 
 	virtual int HitTest(CPoint point, CWorkpadDlg* pView, BOOL bSelected);
 	virtual BOOL Intersects(const CRect& rect);
-	virtual CDCDrawObj* Clone(CDCPickerDoc* pDoc = NULL);
+	virtual CDCDrawObj* Clone(CWorkpadDlg* pDoc = NULL);
 	virtual void MoveTo(const CRect& positon, CWorkpadDlg* pView = NULL);
 	virtual void MoveHandleTo(int nHandle, CPoint point, CWorkpadDlg* pView = NULL);
 

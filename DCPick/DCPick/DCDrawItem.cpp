@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "DCPicker.h"
 #include "DCDrawObj.h"
 #include "DCDrawItem.h"
 

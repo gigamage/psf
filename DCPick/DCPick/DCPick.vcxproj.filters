@@ -62,10 +62,10 @@
     <ClCompile Include="DCDrawObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DCDrawTool.cpp">
+    <ClCompile Include="WorkpadDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WorkpadDlg.cpp">
+    <ClCompile Include="DCDrawTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
