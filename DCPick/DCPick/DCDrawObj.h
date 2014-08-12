@@ -75,6 +75,7 @@ protected:
 
 public:
 	CDCDrawRect(const CRect& position);
+	virtual ~CDCDrawRect();
 
 //	Implementation
 public:

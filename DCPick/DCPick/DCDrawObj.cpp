@@ -470,3 +470,8 @@ void CDCDrawRect::Serialize(CArchive& ar)
 		ar >> m_roundness;
 	}
 }
+
+CDCDrawRect::~CDCDrawRect()
+{
+	int i = 0; ++i;
+}

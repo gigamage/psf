@@ -6,6 +6,7 @@
 #include "WorkpadDlg.h"
 #include "DCDrawObj.h"
 #include "DCDrawItem.h"
+#include "DCDrawTool.h"
 #include "afxdialogex.h"
 
 
@@ -16,21 +17,31 @@ IMPLEMENT_DYNAMIC(CWorkpadDlg, CDialogEx)
 CWorkpadDlg::CWorkpadDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CWorkpadDlg::IDD, pParent)
 {
-
+	m_pSelection = new CDCDrawObjList;
 }
 
 CWorkpadDlg::~CWorkpadDlg()
 {
+	delete m_pSelection;
 }
 
 void CWorkpadDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_PAGE, m_StaticPage);
 }
 
 
 BEGIN_MESSAGE_MAP(CWorkpadDlg, CDialogEx)
 	ON_WM_PAINT()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_LBUTTONDBLCLK()
+	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_DRAW_SELECT, &CWorkpadDlg::OnDrawSelect)
+	ON_UPDATE_COMMAND_UI(ID_DRAW_SELECT, &CWorkpadDlg::OnUpdateDrawSelect)
+	ON_COMMAND(ID_DRAW_RECT, &CWorkpadDlg::OnDrawRect)
+	ON_UPDATE_COMMAND_UI(ID_DRAW_RECT, &CWorkpadDlg::OnUpdateDrawRect)
 END_MESSAGE_MAP()
 
 
@@ -39,22 +50,29 @@ END_MESSAGE_MAP()
 
 void CWorkpadDlg::OnPaint()
 {
-	CDC dcBuffer;
+	CPaintDC dcBuffer(this);
 	CBitmap bitmap;
 	CBitmap* pOldBitmap = 0;
-	CPaintDC dc(this); // device context for painting
-	CDC* pDrawDC = &dc;
+	//CPaintDC dc(this); // device context for painting
+	CPaintDC dc(&m_StaticPage);
+	CPaintDC* pDrawDC = &dc;
 
-	CRect client;
-	dc.GetClipBox(client);
+	CRect client, clientStatic;
+	//dc.GetClipBox(client);
 
-	CRect rect = client;
+	m_StaticPage.GetClientRect(client);
+	clientStatic = client;
+	DocToClient(clientStatic);
+	//m_StaticPage.GetWindowRect(clientStatic);
+
+	//ScreenToClient(clientStatic);
+	CRect rect = clientStatic;
 
 	//	DocToClient
 
 	if (dcBuffer.CreateCompatibleDC(&dc))
 	{
-		if (bitmap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height()))
+		if (bitmap.CreateCompatibleBitmap(&dc, client.Width(), client.Height()))
 		{
 			//	prepare dc
 			pDrawDC = &dcBuffer;
@@ -69,10 +87,13 @@ void CWorkpadDlg::OnPaint()
 	{
 		return;
 	}
+	brush.UnrealizeObject();
 
-	pDrawDC->FillRect(client, &brush);
+	pDrawDC->FillRect(clientStatic, &brush);
 
-	m_kImage.Draw(pDrawDC->GetSafeHdc(), 0, 0);
+	m_kImage.Draw(pDrawDC->GetSafeHdc(), client.left, client.top);
+
+	DrawObjects(pDrawDC);
 
 	if (pDrawDC != (CDC*)&dc)
 	{
@@ -83,10 +104,11 @@ void CWorkpadDlg::OnPaint()
 		dcBuffer.SetViewportOrg(0, 0);
 		dcBuffer.SetWindowOrg(0,0);
 		dcBuffer.SetMapMode(MM_TEXT);
-		dc.BitBlt(rect.left, rect.top, rect.Width(), rect.Height(),
+		dc.BitBlt(client.left, client.top, client.Width(), client.Height(),
 			&dcBuffer, 0, 0, SRCCOPY);
 		dcBuffer.SelectObject(pOldBitmap);
 	}
+	//__super::OnPaint();
 }
 
 void CWorkpadDlg::SetImageFile(const CString& strImagePath)
@@ -98,38 +120,52 @@ void CWorkpadDlg::SetImageFile(const CString& strImagePath)
 BOOL CWorkpadDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	//m_ToolBar.Create(this);
-	//m_ToolBar.SetBarStyle(m_ToolBar.GetBarStyle() 
-	//	| CBRS_FLOATING);
-	//m_ToolBar.LoadToolBar(IDR_TOOLBAR1);
-
-	//CRect rcClientStart;
-	//CRect rcClientNow;
-	//GetClientRect(rcClientStart);
-	//RepositionBars(AFX_IDW_CONTROLBAR_FIRST,
-	//	AFX_IDW_CONTROLBAR_LAST,
-	//	0, reposQuery, rcClientNow);
-
-	//CRect rcWindow;
-	//GetWindowRect(rcWindow);
-	//rcWindow.right += rcClientStart.Width() - rcClientNow.Width();
-	//rcWindow.bottom += rcClientStart.Height() - rcClientNow.Height();
-	//MoveWindow(rcWindow, FALSE);
-	//RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
 	
+	m_ToolBar.Create(this);
+	m_ToolBar.SetBarStyle(m_ToolBar.GetBarStyle() 
+		| CBRS_FLOATING);
+	m_ToolBar.LoadToolBar(IDR_TOOLBAR1);
+
+	CRect rcClientStart;
+	CRect rcClientNow;
+	GetClientRect(rcClientStart);
+	RepositionBars(AFX_IDW_CONTROLBAR_FIRST,
+		AFX_IDW_CONTROLBAR_LAST,
+		0, reposQuery, rcClientNow);
+
+	CRect rcWindow;
+	GetWindowRect(rcWindow);
+	rcWindow.right += rcClientStart.Width() - rcClientNow.Width();
+	rcWindow.bottom += rcClientStart.Height() - rcClientNow.Height();
+	MoveWindow(rcWindow, FALSE);
+	
+	RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
+
 	return TRUE;
 }
 
 void CWorkpadDlg::ClientToDoc(CPoint& point)
 {
-	CClientDC dc(this);
+	CClientDC dc(&m_StaticPage);
+
+	CRect clientStatic;
+	m_StaticPage.GetWindowRect(clientStatic);
+	ScreenToClient(clientStatic);
+	point -= clientStatic.TopLeft();
+
 	OnPrepareDC(&dc, NULL);
 	dc.DPtoLP(&point);
 }
 
 void CWorkpadDlg::ClientToDoc(CRect& rect)
 {
-	CClientDC dc(this);
+	CClientDC dc(&m_StaticPage);
+
+	CRect client;
+	m_StaticPage.GetClientRect(&client);
+	rect -= client.TopLeft();
+
+
 	OnPrepareDC(&dc, NULL);
 	dc.DPtoLP(rect);
 	ASSERT(rect.left <= rect.right);
@@ -138,14 +174,28 @@ void CWorkpadDlg::ClientToDoc(CRect& rect)
 
 void CWorkpadDlg::DocToClient(CPoint& point)
 {
-	CClientDC dc(this);
+	CClientDC dc(&m_StaticPage);
+
+
+	CRect clientStatic;
+	m_StaticPage.GetWindowRect(clientStatic);
+	ScreenToClient(clientStatic);
+	point += clientStatic.TopLeft();
+
 	OnPrepareDC(&dc, NULL);
 	dc.LPtoDP(&point);
 }
 
 void CWorkpadDlg::DocToClient(CRect& rect)
 {
-	CClientDC dc(this);
+	CClientDC dc(&m_StaticPage);
+
+	CRect clientStatic;
+	m_StaticPage.GetWindowRect(clientStatic);
+	ScreenToClient(clientStatic);
+	rect += clientStatic.TopLeft();
+
+
 	OnPrepareDC(&dc, NULL);
 	dc.LPtoDP(rect);
 	rect.NormalizeRect();
@@ -211,6 +261,10 @@ void CWorkpadDlg::Remove(CDCDrawObj* pObj)
 	POSITION pos = m_objects.Find(pObj);
 	if (pos != NULL)
 		m_objects.RemoveAt(pos);
+
+	pos = m_pSelection->Find(pObj);
+	if (pos != NULL)
+		m_pSelection->RemoveAt(pos);
 	// set document modified flag
 	//SetModifiedFlag();
 
@@ -228,9 +282,58 @@ BOOL CWorkpadDlg::IsSelected(const CObject* pDocItem) const
 	return m_pSelection->Find(pDrawObj) != NULL;
 }
 
-void CWorkpadDlg::UpdateDlg(DWORD dwFlag, CObject* )
+void CWorkpadDlg::UpdateDlg(DWORD lHint, CObject* pHint)
 {
+	switch (lHint)
+	{
+	case HINT_UPDATE_WINDOW:    // redraw entire window
+		Invalidate(FALSE);
+		break;
 
+	case HINT_UPDATE_DRAWOBJ:   // a single object has changed
+		InvalObj((CDCDrawObj*)pHint);
+		break;
+
+	case HINT_UPDATE_SELECTION: // an entire selection has changed
+		{
+			CDCDrawObjList* pList = pHint != NULL ?
+				(CDCDrawObjList*)pHint : m_pSelection;
+			POSITION pos = pList->GetHeadPosition();
+			while (pos != NULL)
+				InvalObj(pList->GetNext(pos));
+		}
+		break;
+
+	case HINT_DELETE_SELECTION: // an entire selection has been removed
+		if (pHint != m_pSelection)
+		{
+			CDCDrawObjList* pList = (CDCDrawObjList*)pHint;
+			POSITION pos = pList->GetHeadPosition();
+			while (pos != NULL)
+			{
+				CDCDrawObj* pObj = pList->GetNext(pos);
+				InvalObj(pObj);
+				Remove(pObj);   // remove it from this view's selection
+			}
+		}
+		break;
+
+	case HINT_UPDATE_OLE_ITEMS:
+		{
+			POSITION pos = GetObjects()->GetHeadPosition();
+			while (pos != NULL)
+			{
+				CDCDrawObj* pObj = GetObjects()->GetNext(pos);
+				if (pObj->IsKindOf(RUNTIME_CLASS(CDCDrawOleObj)))
+					InvalObj(pObj);
+			}
+		}
+		break;
+
+	default:
+		ASSERT(FALSE);
+		break;
+	}
 
 }
 
@@ -240,12 +343,12 @@ void CWorkpadDlg::InvalObj(CDCDrawObj* pObj)
 	DocToClient(rect);
 	if (m_bActive && IsSelected(pObj))
 	{
-		rect.left -= 4;
-		rect.top -= 5;
-		rect.right += 5;
+		rect.left -= 4 * 2;
+		rect.top -= 5 * 2;
+		rect.right += 5 * 2;
 		rect.bottom += 4;
 	}
-	rect.InflateRect(1, 1); // handles CDrawOleObj objects
+	rect.InflateRect(2, 2); // handles CDrawOleObj objects
 
 	InvalidateRect(rect, FALSE);
 }
@@ -277,4 +380,84 @@ CDCDrawObj* CWorkpadDlg::ObjectAt(const CPoint& point)
 	}
 
 	return NULL;
+}
+
+void CWorkpadDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if (!m_bActive)
+		return;
+	CDCDrawTool* pTool = CDCDrawTool::FindTool(CDCDrawTool::c_drawShape);
+	if (pTool != NULL)
+	{
+		pTool->OnLButtonDown(this, nFlags, point);
+	}
+	CDialogEx::OnLButtonDown(nFlags, point);
+}
+
+
+void CWorkpadDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	if (!m_bActive)
+		return;
+	CDCDrawTool* pTool = 
+		CDCDrawTool::FindTool(CDCDrawTool::c_drawShape);
+	if (pTool != NULL)
+		pTool->OnLButtonUp(this, nFlags, point);
+	CDialogEx::OnLButtonUp(nFlags, point);
+}
+
+
+void CWorkpadDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialogEx::OnLButtonDblClk(nFlags, point);
+}
+
+
+void CWorkpadDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (!m_bActive)
+		return;
+	CDCDrawTool* pTool = CDCDrawTool::FindTool(CDCDrawTool::c_drawShape);
+	if (pTool != NULL)
+		pTool->OnMouseMove(this, nFlags, point);
+	Invalidate(FALSE);
+	CDialogEx::OnMouseMove(nFlags, point);
+}
+
+
+void CWorkpadDlg::OnDrawSelect()
+{
+	CDCDrawTool::c_drawShape = selection;
+}
+
+
+void CWorkpadDlg::OnUpdateDrawSelect(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetRadio(CDCDrawTool::c_drawShape == selection);
+}
+
+
+void CWorkpadDlg::OnDrawRect()
+{
+	CDCDrawTool::c_drawShape = rect;
+}
+
+
+void CWorkpadDlg::OnUpdateDrawRect(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetRadio(CDCDrawTool::c_drawShape == rect);
+}
+
+void CWorkpadDlg::DrawObjects(CDC* pDC)
+{
+	POSITION pos = m_objects.GetHeadPosition();
+	while (pos != NULL)
+	{
+		CDCDrawObj* pObj = m_objects.GetNext(pos);
+		pObj->Draw(pDC);
+		if (m_bActive && !pDC->IsPrinting() && IsSelected(pObj))
+			pObj->DrawTracker(pDC, CDCDrawObj::selected);
+	}
 }

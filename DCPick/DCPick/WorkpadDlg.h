@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 class CDCDrawObj;
 typedef CTypedPtrList<CObList, CDCDrawObj*> CDCDrawObjList;
@@ -40,6 +41,7 @@ public:
 
 	void Add(CDCDrawObj* pObj);
 	void Remove(CDCDrawObj* pObj);
+	void DrawObjects(CDC* pDC);
 
 	CDCDrawObjList* GetObjects() { return &m_objects; }
 	void UpdateDlg(DWORD dwFlag, CObject* );
@@ -66,4 +68,13 @@ public:
 
 public:
 	virtual BOOL OnInitDialog();
+	CStatic m_StaticPage;
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnDrawSelect();
+	afx_msg void OnUpdateDrawSelect(CCmdUI *pCmdUI);
+	afx_msg void OnDrawRect();
+	afx_msg void OnUpdateDrawRect(CCmdUI *pCmdUI);
 };
