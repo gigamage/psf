@@ -148,63 +148,65 @@ void CWorkpadDlg::ClientToDoc(CPoint& point)
 {
 	CClientDC dc(&m_StaticPage);
 
+	OnPrepareDC(&dc, NULL);
+	dc.DPtoLP(&point);
+
 	CRect clientStatic;
 	m_StaticPage.GetWindowRect(clientStatic);
 	ScreenToClient(clientStatic);
 	point -= clientStatic.TopLeft();
 
-	OnPrepareDC(&dc, NULL);
-	dc.DPtoLP(&point);
+
 }
 
 void CWorkpadDlg::ClientToDoc(CRect& rect)
 {
 	CClientDC dc(&m_StaticPage);
-
+	OnPrepareDC(&dc, NULL);
+	dc.DPtoLP(rect);
+	ASSERT(rect.left <= rect.right);
+	ASSERT(rect.bottom >= rect.top);
 	CRect client;
 	m_StaticPage.GetClientRect(&client);
 	rect -= client.TopLeft();
 
 
-	OnPrepareDC(&dc, NULL);
-	dc.DPtoLP(rect);
-	ASSERT(rect.left <= rect.right);
-	ASSERT(rect.bottom >= rect.top);
+
 }
 
 void CWorkpadDlg::DocToClient(CPoint& point)
 {
-	CClientDC dc(&m_StaticPage);
+	CClientDC dc(this);
 
-
+	OnPrepareDC(&dc, NULL);
+	dc.LPtoDP(&point);
 	CRect clientStatic;
 	m_StaticPage.GetWindowRect(clientStatic);
 	ScreenToClient(clientStatic);
 	point += clientStatic.TopLeft();
 
-	OnPrepareDC(&dc, NULL);
-	dc.LPtoDP(&point);
+
 }
 
 void CWorkpadDlg::DocToClient(CRect& rect)
 {
 	CClientDC dc(&m_StaticPage);
 
+	OnPrepareDC(&dc, NULL);
+	dc.LPtoDP(rect);
+	rect.NormalizeRect();
 	CRect clientStatic;
 	m_StaticPage.GetWindowRect(clientStatic);
 	ScreenToClient(clientStatic);
 	rect += clientStatic.TopLeft();
 
 
-	OnPrepareDC(&dc, NULL);
-	dc.LPtoDP(rect);
-	rect.NormalizeRect();
 }
 
 void CWorkpadDlg::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo )
 {
-	pDC->SetMapMode(MM_ANISOTROPIC);
-	//pDC->SetMapMode(MM_TEXT);
+	//pDC->SetMapMode(MM_ANISOTROPIC);
+	pDC->SetMapMode(MM_TEXT);
 	pDC->SetViewportExt(pDC->GetDeviceCaps(LOGPIXELSX),
 		pDC->GetDeviceCaps(LOGPIXELSY));
 	pDC->SetWindowExt(100, 100);
