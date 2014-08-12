@@ -50,12 +50,12 @@ END_MESSAGE_MAP()
 
 void CWorkpadDlg::OnPaint()
 {
-	CPaintDC dcBuffer(this);
+	CDC dcBuffer;
 	CBitmap bitmap;
 	CBitmap* pOldBitmap = 0;
 	//CPaintDC dc(this); // device context for painting
 	CPaintDC dc(&m_StaticPage);
-	CPaintDC* pDrawDC = &dc;
+	CDC* pDrawDC = &dc;
 
 	CRect client, clientStatic;
 	//dc.GetClipBox(client);
@@ -108,7 +108,7 @@ void CWorkpadDlg::OnPaint()
 			&dcBuffer, 0, 0, SRCCOPY);
 		dcBuffer.SelectObject(pOldBitmap);
 	}
-	//__super::OnPaint();
+	__super::OnPaint();
 }
 
 void CWorkpadDlg::SetImageFile(const CString& strImagePath)
