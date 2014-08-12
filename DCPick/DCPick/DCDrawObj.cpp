@@ -260,7 +260,8 @@ CRect CDCDrawObj::GetHandleRect(int nHandleID, CWorkpadDlg* pView)
 	// convert to client/device coords
 	pView->DocToClient(point);
 	// return CRect of handle in device coords
-	rect.SetRect(point.x-3, point.y-3, point.x+3, point.y+3);
+	int iSize = 3;
+	rect.SetRect(point.x-iSize, point.y-iSize, point.x+iSize, point.y+iSize);
 	pView->ClientToDoc(rect);
 
 	return rect;
@@ -280,7 +281,7 @@ int CDCDrawObj::HitTest(CPoint point, CWorkpadDlg* pView, BOOL bSelected)
 			// GetHandleRect returns in logical coords
 			CRect rc = GetHandleRect(nHandle,pView);
 			if (point.x >= rc.left && point.x < rc.right &&
-				point.y <= rc.top && point.y > rc.bottom)
+				point.y >= rc.top && point.y < rc.bottom)
 				return nHandle;
 		}
 	}

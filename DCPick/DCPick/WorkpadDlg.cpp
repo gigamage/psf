@@ -163,13 +163,14 @@ void CWorkpadDlg::ClientToDoc(CRect& rect)
 {
 	CClientDC dc(&m_StaticPage);
 	OnPrepareDC(&dc, NULL);
+	CRect clientStatic;
+	m_StaticPage.GetWindowRect(clientStatic);
+	ScreenToClient(clientStatic);
+	rect-= clientStatic.TopLeft();
+
 	dc.DPtoLP(rect);
 	ASSERT(rect.left <= rect.right);
 	ASSERT(rect.bottom >= rect.top);
-	CRect client;
-	m_StaticPage.GetClientRect(&client);
-	rect -= client.TopLeft();
-
 
 
 }
