@@ -18,6 +18,8 @@ CWorkpadDlg::CWorkpadDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CWorkpadDlg::IDD, pParent)
 {
 	m_pSelection = new CDCDrawObjList;
+	m_hAccelTable
+		= LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
 }
 
 CWorkpadDlg::~CWorkpadDlg()
@@ -42,6 +44,11 @@ BEGIN_MESSAGE_MAP(CWorkpadDlg, CDialogEx)
 	ON_UPDATE_COMMAND_UI(ID_DRAW_SELECT, &CWorkpadDlg::OnUpdateDrawSelect)
 	ON_COMMAND(ID_DRAW_RECT, &CWorkpadDlg::OnDrawRect)
 	ON_UPDATE_COMMAND_UI(ID_DRAW_RECT, &CWorkpadDlg::OnUpdateDrawRect)
+	ON_WM_RBUTTONUP()
+	ON_COMMAND(ID_EDIT_CLEAR, &CWorkpadDlg::OnDelete)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_CLEAR, &CWorkpadDlg::OnUpdateDelete)
+	ON_WM_CONTEXTMENU()
+	ON_COMMAND(ID_EDIT_SELECTION, &CWorkpadDlg::OnEditSelection)
 END_MESSAGE_MAP()
 
 
@@ -425,7 +432,7 @@ void CWorkpadDlg::OnMouseMove(UINT nFlags, CPoint point)
 	CDCDrawTool* pTool = CDCDrawTool::FindTool(CDCDrawTool::c_drawShape);
 	if (pTool != NULL)
 		pTool->OnMouseMove(this, nFlags, point);
-	Invalidate(FALSE);
+	//Invalidate(FALSE);
 	CDialogEx::OnMouseMove(nFlags, point);
 }
 
@@ -462,5 +469,107 @@ void CWorkpadDlg::DrawObjects(CDC* pDC)
 		pObj->Draw(pDC);
 		if (m_bActive && !pDC->IsPrinting() && IsSelected(pObj))
 			pObj->DrawTracker(pDC, CDCDrawObj::selected);
+	}
+}
+
+void CWorkpadDlg::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	//if (!m_bActive)
+	//	return;
+
+	//CDCDrawTool* pTool = 
+	//	CDCDrawTool::FindTool(CDCDrawTool::c_drawShape);
+	//if (pTool != NULL)
+	//	pTool->OnRButtonUp(this, nFlags, point);
+	CDialogEx::OnRButtonUp(nFlags, point);
+}
+
+
+void CWorkpadDlg::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	// make sure window is active
+	
+	//GetParentFrame()->ActivateFrame();
+
+	CPoint local = point;
+	ScreenToClient(&local);
+	ClientToDoc(local);
+
+	CDCDrawObj* pObj;
+	pObj = ObjectAt(local);
+	if(pObj != NULL)
+	{
+		if(!IsSelected(pObj))
+			Select( pObj, FALSE );          // reselect item if appropriate
+		UpdateWindow();
+
+		CMenu menu;
+		if (menu.LoadMenu(IDR_POP_MENU))
+		{
+			CMenu* pPopup = menu.GetSubMenu(0);
+			ENSURE(pPopup != NULL);
+
+			int nCmd = pPopup->TrackPopupMenuEx(TPM_RIGHTBUTTON | TPM_LEFTALIGN| TPM_VERPOSANIMATION | TPM_RETURNCMD | TPM_NONOTIFY,
+				point.x, point.y,
+				AfxGetMainWnd(), NULL); // route commands through main window
+			if (nCmd)
+				SendMessage(WM_COMMAND, nCmd);
+		}
+	}
+}
+
+
+void CWorkpadDlg::OnDelete()
+{
+	// update all the views before the selection goes away
+	UpdateDlg(HINT_DELETE_SELECTION, m_pSelection);
+	UpdateDlg(HINT_UPDATE_SELECTION, NULL);
+
+	// now remove the selection from the document
+	POSITION pos = m_pSelection->GetHeadPosition();
+	while (pos != NULL)
+	{
+		CDCDrawObj* pObj = m_pSelection->GetNext(pos);
+		Remove(pObj);
+		pObj->Remove();
+	}
+	//Cleanup Tool members such as CPolyTool::m_pDrawObj, that should be NULL at this point.
+	CDCDrawTool* pTool = CDCDrawTool::FindTool(CDCDrawTool::c_drawShape);
+	if (pTool != NULL)
+	{
+		pTool->OnCancel();
+	}
+	m_pSelection->RemoveAll();
+}
+
+
+void CWorkpadDlg::OnUpdateDelete(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(!m_pSelection->IsEmpty());
+}
+
+
+BOOL CWorkpadDlg::PreTranslateMessage(MSG* pMsg)
+{
+
+	if (m_hAccelTable) {
+		if (::TranslateAccelerator(m_hWnd, m_hAccelTable, pMsg)) {
+			return(TRUE);
+		}
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CWorkpadDlg::OnEditSelection()
+{
+	if (m_pSelection->GetCount() == 1)
+	{
+		CDCDrawObj* pObj = m_pSelection->GetHead();
+		if (pObj)
+		{
+			pObj->OnEditProperties();
+			InvalObj(pObj);
+		}
 	}
 }

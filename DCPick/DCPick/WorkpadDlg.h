@@ -52,6 +52,8 @@ public:
 protected:
 	CImage m_kImage;
 	CToolBar m_ToolBar;
+	HACCEL  m_hAccelTable;
+
 public:
 	CDCDrawObjList* m_pSelection;
 	CDCDrawObjList m_objects;
@@ -77,4 +79,10 @@ public:
 	afx_msg void OnUpdateDrawSelect(CCmdUI *pCmdUI);
 	afx_msg void OnDrawRect();
 	afx_msg void OnUpdateDrawRect(CCmdUI *pCmdUI);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnDelete();
+	afx_msg void OnUpdateDelete(CCmdUI *pCmdUI);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnEditSelection();
 };

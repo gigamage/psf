@@ -22,6 +22,8 @@ public:
 	virtual void OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 	virtual void OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
+	virtual void OnRButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
+	virtual void OnCancel();
 
 //	Attributes
 	DrawShape	m_drawShape;
@@ -45,7 +47,7 @@ public:
 	virtual void OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 	virtual void OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
-
+	virtual void OnRButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 };
 
 class CDCRectTool : public CDCDrawTool
@@ -57,6 +59,7 @@ public:
 	virtual void OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 	virtual void OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
+	virtual void OnRButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point);
 
 };
 

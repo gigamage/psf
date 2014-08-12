@@ -60,6 +60,15 @@ CDCDrawTool* CDCDrawTool::FindTool(DrawShape drawShape)
 	return NULL;
 }
 
+void CDCDrawTool::OnRButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point)
+{
+}
+
+void CDCDrawTool::OnCancel()
+{
+	c_drawShape = selection;
+}
+
 ///////////////////////////////////////////////////////////////////////
 enum SelectMode
 {
@@ -227,6 +236,19 @@ void CDCSelectTool::OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 		CDCDrawTool::OnMouseMove(pView, nFlags, point);
 }
 
+void CDCSelectTool::OnRButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point)
+{
+	selectTool.OnLButtonDown(pView, nFlags, point);
+
+	selectMode = none;
+	if (pView->m_pSelection->GetCount() == 1)
+	{
+		pView->m_pSelection->GetHead()->OnOpen(pView);
+	}
+	selectTool.OnLButtonUp(pView, nFlags, point);
+
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -272,7 +294,7 @@ void CDCRectTool::OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 	pView->Select(pObj);
 
 	selectMode = size;
-	nDragHandle = 1;
+	nDragHandle = 5;
 	lastPoint = local;
 }
 
@@ -296,4 +318,10 @@ void CDCRectTool::OnMouseMove(CWorkpadDlg* pView, UINT nFlags, const CPoint& poi
 {
 	SetCursor(AfxGetApp()->LoadStandardCursor(IDC_CROSS));
 	selectTool.OnMouseMove(pView, nFlags, point);
+}
+
+void CDCRectTool::OnRButtonUp(CWorkpadDlg* pView, UINT nFlags, const CPoint& point)
+{
+	selectTool.OnLButtonDown(pView, nFlags, point);
+	CDCDrawTool::OnRButtonUp(pView, nFlags, point);
 }

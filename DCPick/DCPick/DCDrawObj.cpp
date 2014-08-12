@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "DCDrawObj.h"
 #include "resource.h"
+#include "RectEditDlg.h"
 #include "WorkpadDlg.h"
 
 
@@ -348,6 +349,24 @@ void CDCDrawObj::Serialize(CArchive& ar)
 		ar >> wTemp; m_bBrush = (BOOL)wTemp;
 		ar.Read(&m_logbrush, sizeof(LOGBRUSH));
 	}
+}
+
+void CDCDrawObj::OnOpen(CWorkpadDlg* pView)
+{
+	OnEditProperties();
+}
+
+void CDCDrawObj::OnEditProperties()
+{
+	ASSERT_VALID(this);
+
+	CRectEditDlg dlg;
+	dlg.SetRectObj(this);
+	if (IDOK != dlg.DoModal())
+		return;
+
+	CRect rect = dlg.GetRectData();
+	m_position = rect;
 }
 
 // CDCDrawRect member functions

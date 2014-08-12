@@ -37,6 +37,8 @@ public:
 
 	void Invalidate();
 	virtual void Remove();
+	virtual void OnOpen(CWorkpadDlg* pView);
+	virtual void OnEditProperties();
 
 	// Implementation
 public:
