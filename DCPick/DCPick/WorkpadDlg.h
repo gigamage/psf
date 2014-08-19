@@ -1,6 +1,9 @@
 #pragma once
 #include "afxwin.h"
 
+//#include "zoomctrl.h"
+#include "DCPickZoomCtrl.h"
+
 class CDCDrawObj;
 typedef CTypedPtrList<CObList, CDCDrawObj*> CDCDrawObjList;
 
@@ -48,7 +51,7 @@ public:
 
 
 	BOOL m_bActive; // is the view active?
-
+	CImage& GetImage();
 protected:
 	CImage m_kImage;
 	CToolBar m_ToolBar;
@@ -70,7 +73,8 @@ public:
 
 public:
 	virtual BOOL OnInitDialog();
-	CStatic m_StaticPage;
+	//CStatic m_StaticPage;
+	CDCPickZoomCtrl m_StaticPage;
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
@@ -85,4 +89,5 @@ public:
 	afx_msg void OnUpdateDelete(CCmdUI *pCmdUI);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnEditSelection();
+	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };

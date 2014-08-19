@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CWorkpadDlg, CDialogEx)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_CLEAR, &CWorkpadDlg::OnUpdateDelete)
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_EDIT_SELECTION, &CWorkpadDlg::OnEditSelection)
+	ON_WM_VSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -57,64 +58,63 @@ END_MESSAGE_MAP()
 
 void CWorkpadDlg::OnPaint()
 {
-	CDC dcBuffer;
-	CBitmap bitmap;
-	CBitmap* pOldBitmap = 0;
-	//CPaintDC dc(this); // device context for painting
-	CPaintDC dc(&m_StaticPage);
-	CDC* pDrawDC = &dc;
+	//CDC dcBuffer;
+	//CBitmap bitmap;
+	//CBitmap* pOldBitmap = 0;
+	//CPaintDC dc(&m_StaticPage);
 
-	CRect client, clientStatic;
-	//dc.GetClipBox(client);
+	//CRect rcClient;
+	//m_StaticPage.GetClientRect(rcClient);
+	//CRect rVirt(0, 0, 5000, 5000);
+	//m_StaticPage.PrepDC(&dc, rVirt, rcClient);
+	//CDC* pDrawDC = &dc;
 
-	m_StaticPage.GetClientRect(client);
-	clientStatic = client;
-	DocToClient(clientStatic);
-	//m_StaticPage.GetWindowRect(clientStatic);
+	//CRect client, clientStatic;
 
-	//ScreenToClient(clientStatic);
-	CRect rect = clientStatic;
+	//m_StaticPage.GetClientRect(client);
+	//clientStatic = client;
+	//DocToClient(clientStatic);
 
-	//	DocToClient
+	//CRect rect = clientStatic;
 
-	if (dcBuffer.CreateCompatibleDC(&dc))
-	{
-		if (bitmap.CreateCompatibleBitmap(&dc, client.Width(), client.Height()))
-		{
-			//	prepare dc
-			pDrawDC = &dcBuffer;
-			pOldBitmap = dcBuffer.SelectObject(&bitmap);
-			dcBuffer.IntersectClipRect(client);
-		}
-	}
+	//if (dcBuffer.CreateCompatibleDC(&dc))
+	//{
+	//	if (bitmap.CreateCompatibleBitmap(&dc, client.Width(), client.Height()))
+	//	{
+	//		//	prepare dc
+	//		pDrawDC = &dcBuffer;
+	//		pOldBitmap = dcBuffer.SelectObject(&bitmap);
+	//		dcBuffer.IntersectClipRect(client);
+	//	}
+	//}
 
-	//	clear
-	CBrush brush;
-	if (!brush.CreateSolidBrush(RGB(128, 0, 0)))
-	{
-		return;
-	}
-	brush.UnrealizeObject();
+	////	clear
+	//CBrush brush;
+	//if (!brush.CreateSolidBrush(RGB(128, 0, 0)))
+	//{
+	//	return;
+	//}
+	//brush.UnrealizeObject();
 
-	pDrawDC->FillRect(clientStatic, &brush);
+	//pDrawDC->FillRect(clientStatic, &brush);
 
-	m_kImage.Draw(pDrawDC->GetSafeHdc(), client.left, client.top);
+	//m_kImage.Draw(pDrawDC->GetSafeHdc(), client.left, client.top);
 
-	DrawObjects(pDrawDC);
+	//DrawObjects(pDrawDC);
 
-	if (pDrawDC != (CDC*)&dc)
-	{
-		dc.SetViewportOrg(0, 0);
-		dc.SetWindowOrg(0,0);
-		dc.SetMapMode(MM_TEXT);
+	//if (pDrawDC != (CDC*)&dc)
+	//{
+	//	dc.SetViewportOrg(0, 0);
+	//	dc.SetWindowOrg(0,0);
+	//	dc.SetMapMode(MM_TEXT);
 
-		dcBuffer.SetViewportOrg(0, 0);
-		dcBuffer.SetWindowOrg(0,0);
-		dcBuffer.SetMapMode(MM_TEXT);
-		dc.BitBlt(client.left, client.top, client.Width(), client.Height(),
-			&dcBuffer, 0, 0, SRCCOPY);
-		dcBuffer.SelectObject(pOldBitmap);
-	}
+	//	dcBuffer.SetViewportOrg(0, 0);
+	//	dcBuffer.SetWindowOrg(0,0);
+	//	dcBuffer.SetMapMode(MM_TEXT);
+	//	dc.BitBlt(client.left, client.top, client.Width(), client.Height(),
+	//		&dcBuffer, 0, 0, SRCCOPY);
+	//	dcBuffer.SelectObject(pOldBitmap);
+	//}
 	__super::OnPaint();
 }
 
@@ -147,7 +147,13 @@ BOOL CWorkpadDlg::OnInitDialog()
 	MoveWindow(rcWindow, FALSE);
 	
 	RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
-
+	
+	m_StaticPage.SetZoomFactor(1.2f);
+	m_StaticPage.GetWindowRect(rcWindow);
+	m_StaticPage.SetScreenSize(rcWindow);
+	//m_StaticPage.set
+	m_StaticPage.AdjustScrollbars();
+	m_StaticPage.Invalidate();
 	return TRUE;
 }
 
@@ -213,19 +219,10 @@ void CWorkpadDlg::DocToClient(CRect& rect)
 
 void CWorkpadDlg::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo )
 {
-	//pDC->SetMapMode(MM_ANISOTROPIC);
 	pDC->SetMapMode(MM_TEXT);
 	pDC->SetViewportExt(pDC->GetDeviceCaps(LOGPIXELSX),
 		pDC->GetDeviceCaps(LOGPIXELSY));
 	pDC->SetWindowExt(100, 100);
-
-	// set the origin of the coordinate system to the center of the page
-	//CPoint ptOrg;
-	//ptOrg.x = GetDocument()->GetSize().cx / 2;
-	//ptOrg.y = GetDocument()->GetSize().cy / 2;
-
-	//// ptOrg is in logical coordinates
-	//pDC->OffsetWindowOrg(-ptOrg.x,ptOrg.y);
 }
 
 
@@ -572,4 +569,17 @@ void CWorkpadDlg::OnEditSelection()
 			InvalObj(pObj);
 		}
 	}
+}
+
+
+void CWorkpadDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
+}
+
+CImage& CWorkpadDlg::GetImage()
+{
+	return m_kImage;
 }

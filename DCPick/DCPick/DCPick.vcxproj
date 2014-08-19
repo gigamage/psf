@@ -106,11 +106,14 @@
     <ClInclude Include="DCDrawTool.h" />
     <ClInclude Include="DCPick.h" />
     <ClInclude Include="DCPickDlg.h" />
+    <ClInclude Include="DCPickZoomCtrl.h" />
     <ClInclude Include="RectEditDlg.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScrollHelper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WorkpadDlg.h" />
+    <ClInclude Include="zoomctrl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DCDrawItem.cpp">
@@ -122,12 +125,15 @@
     <ClCompile Include="DCDrawTool.cpp" />
     <ClCompile Include="DCPick.cpp" />
     <ClCompile Include="DCPickDlg.cpp" />
+    <ClCompile Include="DCPickZoomCtrl.cpp" />
     <ClCompile Include="RectEditDlg.cpp" />
+    <ClCompile Include="ScrollHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WorkpadDlg.cpp" />
+    <ClCompile Include="zoomctrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DCPick.rc" />
