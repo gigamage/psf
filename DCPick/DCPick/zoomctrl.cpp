@@ -8,6 +8,8 @@
 */
 //---------------------------------------------------------------------
 #include "stdafx.h"
+#include "resource.h"
+#include "WorkpadDlg.h"
 #include "zoomctrl.h"
 
 #ifdef _DEBUG
@@ -21,6 +23,7 @@ CZoomCtrl::CZoomCtrl()
 {
     m_scrollHelper.AttachWnd(this);
 	m_zoomFactor = 1.0;
+	m_rVirt = CRect(0, 0, 5000, 5000);
 }
 //---------------------------------------------------------------------
 CZoomCtrl::~CZoomCtrl()
@@ -41,32 +44,31 @@ END_MESSAGE_MAP()
 void CZoomCtrl::Draw(CDC *pDC)
 {
 	// fill background
-	COLORREF backgrColor = RGB(255,255,192);
+	//COLORREF backgrColor = RGB(255,255,192);
 	CRect rClient;
 	GetClientRect(rClient);
-	pDC->FillRect(&rClient, &CBrush(backgrColor));
+	
+	SetScreenSize(rClient);
+	//pDC->FillRect(&rClient, &CBrush(backgrColor));
 
 	// define virtual drawing space -- change this to suit
 	// if drawing must not distort, then create a rect same shape as rClient
-	CRect rVirt(0, 0, 5000, 5000);
-	PrepDC(pDC, rVirt, rClient);
+	//CRect rVirt(0, 0, 5000, 5000);
+	PrepDC(pDC);//, rVirt, rClient);
 
 	// do your drawing here, in virtual coords
 
-	// here's our sample
-	CRect rTest(2000, 2200, 3000, 2800);
-	CPen penBrown(PS_SOLID, 0, RGB(192,110,0));
-	CPen penGreen(PS_SOLID, 0, RGB(0,192,0));
-	CPen* pOldPen = pDC->SelectObject(&penGreen);
-	pDC->Ellipse(&rTest);
+	// define virtual drawing space -- change this to suit
+	// if drawing must not distort, then create a rect same shape as rClient
+	PrepDC(pDC);//, rVirt, rClient);
 
-	pDC->SelectObject(&penBrown);
-	pDC->MoveTo(0, 0);
-	pDC->LineTo(5000, 5000);
-	pDC->MoveTo(5000, 0);
-	pDC->LineTo(0, 5000);
+	GetWorkpad()->GetImage().Draw(pDC->GetSafeHdc(), rClient.left, rClient.top);
+	GetWorkpad()->DrawObjects(pDC);
+}
 
-	pDC->SelectObject(pOldPen);
+void CZoomCtrl::SetScreenSize(const CRect& rect)
+{
+	m_rScreen = rect;
 }
 //---------------------------------------------------------------------
 void CZoomCtrl::OnPaint()
@@ -76,25 +78,46 @@ void CZoomCtrl::OnPaint()
 	//__super::OnPaint();
 }
 //---------------------------------------------------------------------
-void CZoomCtrl::PrepDC(CDC *pDC, const CRect& rVirt, const CRect& rScreen)
+//void CZoomCtrl::PrepDC(CDC *pDC, const CRect& rVirt, const CRect& rScreen)
+//{
+//	// maps virtual into client
+//	m_rVirt = rVirt;
+//	m_rScreen = rScreen;
+//
+//	pDC->IntersectClipRect(&rScreen);
+//
+//	//pDC->SetMapMode(MM_ANISOTROPIC);
+//	pDC->SetMapMode(MM_TEXT);
+//	pDC->SetWindowExt(rVirt.Width(), rVirt.Height());
+//
+//	LONG wid = (LONG)(m_zoomFactor * (double)rScreen.Width());
+//	LONG hgt = (LONG)(m_zoomFactor * (double)rScreen.Height());
+//	pDC->SetViewportExt(wid, hgt);
+//
+//	CSize scrollPos = m_scrollHelper.GetScrollPos();
+//	pDC->SetViewportOrg(-scrollPos.cx, -scrollPos.cy);
+//}
+
+void CZoomCtrl::PrepDC(CDC* pDC)
 {
 	// maps virtual into client
-	m_rVirt = rVirt;
-	m_rScreen = rScreen;
+	//m_rVirt = rVirt;
+	//m_rScreen = rScreen;
 
-	pDC->IntersectClipRect(&rScreen);
+	pDC->IntersectClipRect(&m_rScreen);
 
 	//pDC->SetMapMode(MM_ANISOTROPIC);
 	pDC->SetMapMode(MM_TEXT);
-	pDC->SetWindowExt(rVirt.Width(), rVirt.Height());
+	pDC->SetWindowExt(m_rVirt.Width(), m_rVirt.Height());
 
-	LONG wid = (LONG)(m_zoomFactor * (double)rScreen.Width());
-	LONG hgt = (LONG)(m_zoomFactor * (double)rScreen.Height());
+	LONG wid = (LONG)(m_zoomFactor * (double)m_rScreen.Width());
+	LONG hgt = (LONG)(m_zoomFactor * (double)m_rScreen.Height());
 	pDC->SetViewportExt(wid, hgt);
 
 	CSize scrollPos = m_scrollHelper.GetScrollPos();
 	pDC->SetViewportOrg(-scrollPos.cx, -scrollPos.cy);
 }
+
 //---------------------------------------------------------------------
 void CZoomCtrl::AdjustScrollbars()
 {
@@ -154,4 +177,10 @@ BOOL CZoomCtrl::OnEraseBkgnd(CDC* pDC)
 	// for smoothest resize, also set clipchildren style in parent dialog
     return TRUE;
 }
+
+CWorkpadDlg* CZoomCtrl::GetWorkpad()
+{
+	return(CWorkpadDlg*) GetParent();
+}
+
 //---------------------------------------------------------------------

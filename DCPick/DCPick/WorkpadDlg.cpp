@@ -161,7 +161,11 @@ void CWorkpadDlg::ClientToDoc(CPoint& point)
 {
 	CClientDC dc(&m_StaticPage);
 
-	OnPrepareDC(&dc, NULL);
+
+	m_StaticPage.PrepDC(&dc);//, rVirt, rClient);
+
+
+	//OnPrepareDC(&dc, NULL);
 	dc.DPtoLP(&point);
 
 	CRect clientStatic;
@@ -175,7 +179,9 @@ void CWorkpadDlg::ClientToDoc(CPoint& point)
 void CWorkpadDlg::ClientToDoc(CRect& rect)
 {
 	CClientDC dc(&m_StaticPage);
-	OnPrepareDC(&dc, NULL);
+	m_StaticPage.PrepDC(&dc);//, rVirt, rClient);
+
+	//OnPrepareDC(&dc, NULL);
 	CRect clientStatic;
 	m_StaticPage.GetWindowRect(clientStatic);
 	ScreenToClient(clientStatic);
@@ -190,9 +196,11 @@ void CWorkpadDlg::ClientToDoc(CRect& rect)
 
 void CWorkpadDlg::DocToClient(CPoint& point)
 {
-	CClientDC dc(this);
+	CClientDC dc(&m_StaticPage);
 
-	OnPrepareDC(&dc, NULL);
+	m_StaticPage.PrepDC(&dc);//, rVirt, rClient);
+
+	//OnPrepareDC(&dc, NULL);
 	dc.LPtoDP(&point);
 	CRect clientStatic;
 	m_StaticPage.GetWindowRect(clientStatic);
@@ -206,7 +214,9 @@ void CWorkpadDlg::DocToClient(CRect& rect)
 {
 	CClientDC dc(&m_StaticPage);
 
-	OnPrepareDC(&dc, NULL);
+	m_StaticPage.PrepDC(&dc);//, rVirt, rClient);
+
+	//OnPrepareDC(&dc, NULL);
 	dc.LPtoDP(rect);
 	rect.NormalizeRect();
 	CRect clientStatic;

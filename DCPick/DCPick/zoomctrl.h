@@ -5,6 +5,8 @@
 
 #include "scrollhelper.h"
 
+class CWorkpadDlg;
+
 //---------------------------------------------------------------------
 class CZoomCtrl : public CWnd
 {
@@ -28,7 +30,11 @@ public:
 	afx_msg int			OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
 	afx_msg BOOL		OnEraseBkgnd(CDC* pDC);
 public:
-	void				PrepDC(CDC *pDC, const CRect& rVirt, const CRect& rScreen);
+	void				SetScreenSize(const CRect& rect);
+	CWorkpadDlg*		GetWorkpad();
+
+	void				PrepDC(CDC* pDC);
+	//void				PrepDC(CDC *pDC, const CRect& rVirt, const CRect& rScreen);
 
 protected:
 	virtual void		Draw(CDC *pDC);
