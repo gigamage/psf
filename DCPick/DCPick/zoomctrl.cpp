@@ -60,7 +60,7 @@ void CZoomCtrl::Draw(CDC *pDC)
 
 	// define virtual drawing space -- change this to suit
 	// if drawing must not distort, then create a rect same shape as rClient
-	PrepDC(pDC);//, rVirt, rClient);
+	//PrepDC(pDC);//, rVirt, rClient);
 
 	GetWorkpad()->GetImage().Draw(pDC->GetSafeHdc(), rClient.left, rClient.top);
 	GetWorkpad()->DrawObjects(pDC);
@@ -103,8 +103,9 @@ void CZoomCtrl::PrepDC(CDC* pDC)
 	// maps virtual into client
 	//m_rVirt = rVirt;
 	//m_rScreen = rScreen;
-
+	CRect kRect(m_rScreen.TopLeft(), m_rScreen.BottomRight() - CPoint(10, 10));
 	pDC->IntersectClipRect(&m_rScreen);
+	//m_rScreen = kRect;
 
 	//pDC->SetMapMode(MM_ANISOTROPIC);
 	pDC->SetMapMode(MM_TEXT);
@@ -130,7 +131,10 @@ void CZoomCtrl::AdjustScrollbars()
 void CZoomCtrl::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
     m_scrollHelper.OnHScroll(nSBCode, nPos, pScrollBar);
-	Invalidate();
+	if (CWnd* pWnd = GetParent())
+		pWnd->Invalidate(FALSE);
+	else
+		Invalidate();
 }
 //---------------------------------------------------------------------
 void CZoomCtrl::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
