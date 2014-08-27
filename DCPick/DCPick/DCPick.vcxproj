@@ -106,7 +106,6 @@
     <ClInclude Include="DCDrawTool.h" />
     <ClInclude Include="DCPick.h" />
     <ClInclude Include="DCPickDlg.h" />
-    <ClInclude Include="DCPickZoomCtrl.h" />
     <ClInclude Include="RectEditDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScrollHelper.h" />
@@ -125,7 +124,6 @@
     <ClCompile Include="DCDrawTool.cpp" />
     <ClCompile Include="DCPick.cpp" />
     <ClCompile Include="DCPickDlg.cpp" />
-    <ClCompile Include="DCPickZoomCtrl.cpp" />
     <ClCompile Include="RectEditDlg.cpp" />
     <ClCompile Include="ScrollHelper.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -19,6 +19,16 @@ public:
 	// Attributes
 	CRect m_position;
 	CWorkpadDlg* m_pDocument;
+protected:
+	int m_iIndex;
+public:
+	int Index() const { return m_iIndex; }
+	void Index(int val) { m_iIndex = val; }
+public:
+	static int GenerateNewIndex();
+	static void ResetIndex();
+	static int m_sLastIndex;
+public:	
 	virtual int GetHandleCount();
 	virtual CPoint GetHandle(int nHandle);
 	virtual HCURSOR GetHandleCursor(int nHandle);
@@ -28,6 +38,7 @@ public:
 	// Operations
 	virtual void Draw(CDC* pDC);
 	virtual void DrawTracker(CDC* pDC, TrackerState state);
+	virtual void DrawIndexNumber(CDC* pDC);
 
 	virtual int HitTest(CPoint point, CWorkpadDlg* pView, BOOL bSelected);
 	virtual BOOL Intersects(const CRect& rect);

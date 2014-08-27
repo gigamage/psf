@@ -2,7 +2,7 @@
 #include "afxwin.h"
 
 //#include "zoomctrl.h"
-#include "DCPickZoomCtrl.h"
+#include "ZoomCtrl.h"
 
 class CDCDrawObj;
 typedef CTypedPtrList<CObList, CDCDrawObj*> CDCDrawObjList;
@@ -74,7 +74,7 @@ public:
 public:
 	virtual BOOL OnInitDialog();
 	//CStatic m_StaticPage;
-	CDCPickZoomCtrl m_StaticPage;
+	CZoomCtrl m_StaticPage;
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);

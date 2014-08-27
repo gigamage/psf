@@ -269,6 +269,7 @@ void CDCRectTool::OnLButtonDown(CWorkpadDlg* pView, UINT nFlags, const CPoint& p
 	pView->ClientToDoc(local);
 
 	CDCDrawRect* pObj = new CDCDrawRect(CRect(local, CSize(0, 0)));
+	pObj->Index(CDCDrawObj::GenerateNewIndex());
 	switch (m_drawShape)
 	{
 	default:

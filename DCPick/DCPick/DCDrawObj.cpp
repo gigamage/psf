@@ -7,6 +7,7 @@
 #include "RectEditDlg.h"
 #include "WorkpadDlg.h"
 
+int CDCDrawObj::m_sLastIndex = 0;
 
 // CDCDrawObj
 IMPLEMENT_SERIAL(CDCDrawObj, CObject, 0)
@@ -28,6 +29,7 @@ CDCDrawObj::CDCDrawObj(const CRect& position)
 	m_logbrush.lbStyle = BS_SOLID;
 	m_logbrush.lbColor = RGB(192, 192, 192);
 	m_logbrush.lbHatch = HS_HORIZONTAL;
+	m_iIndex = 0;
 }
 
 HCURSOR CDCDrawObj::GetHandleCursor(int nHandle)
@@ -75,6 +77,18 @@ void CDCDrawObj::Remove()
 void CDCDrawObj::Draw(CDC*)
 {
 
+}
+
+
+void CDCDrawObj::DrawIndexNumber(CDC* pDC)
+{
+	ASSERT_VALID(this);
+	CString strNumber;
+	strNumber.Format(L"%d", Index());
+	CPoint ptTopLeft = GetHandle(1) + CPoint(3, 3);
+	CRect rcText(ptTopLeft, ptTopLeft + CPoint(15, 15));
+	
+	pDC->DrawText(strNumber, &rcText, DT_BOTTOM);
 }
 
 
@@ -316,6 +330,7 @@ CDCDrawObj* CDCDrawObj::Clone(CWorkpadDlg* pDoc)
 	pClone->m_logpen = m_logpen;
 	pClone->m_bBrush = m_bBrush;
 	pClone->m_logbrush = m_logbrush;
+	pClone->Index(Index());
 	ASSERT_VALID(pClone);
 
 	if (pDoc != NULL)
@@ -367,6 +382,18 @@ void CDCDrawObj::OnEditProperties()
 
 	CRect rect = dlg.GetRectData();
 	m_position = rect;
+}
+
+int CDCDrawObj::GenerateNewIndex()
+{
+	int iIndex = m_sLastIndex;
+	++m_sLastIndex;
+	return iIndex;
+}
+
+void CDCDrawObj::ResetIndex()
+{
+	m_sLastIndex = 0;
 }
 
 // CDCDrawRect member functions

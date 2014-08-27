@@ -54,9 +54,6 @@
     <ClInclude Include="ScrollHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DCPickZoomCtrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DCPick.cpp">
@@ -87,9 +84,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScrollHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DCPickZoomCtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

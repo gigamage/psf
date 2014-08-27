@@ -20,6 +20,7 @@ CWorkpadDlg::CWorkpadDlg(CWnd* pParent /*=NULL*/)
 	m_pSelection = new CDCDrawObjList;
 	m_hAccelTable
 		= LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
+	CDCDrawObj::ResetIndex();
 }
 
 CWorkpadDlg::~CWorkpadDlg()
@@ -475,7 +476,10 @@ void CWorkpadDlg::DrawObjects(CDC* pDC)
 		CDCDrawObj* pObj = m_objects.GetNext(pos);
 		pObj->Draw(pDC);
 		if (m_bActive && !pDC->IsPrinting() && IsSelected(pObj))
+		{
 			pObj->DrawTracker(pDC, CDCDrawObj::selected);
+		}
+		pObj->DrawIndexNumber(pDC);
 	}
 }
 
